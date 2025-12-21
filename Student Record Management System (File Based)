@@ -1,0 +1,80 @@
+def load_students():
+    try:
+        with open("students.txt", "r") as file:
+            students = []
+            for line in file:
+                name, roll, marks = line.strip().split(",")
+                students.append({
+                    "name":name,
+                    "roll":roll,
+                    "marks":marks
+                })
+            return students
+    except FileNotFoundError:
+
+        return []
+
+def save_students(students):
+    with open("students.txt","w") as file:
+        for student in students:
+            line = f"{student['name']},{student['roll']},{student['marks']}\n"
+            file.write(line)
+
+
+def add_student(students):
+    name = input("Enter student name: ")
+    roll = input("Enter roll number: ")
+    marks = input ("enter marks: ")
+
+    students.append({
+        "name":name,
+        "roll":roll,
+        "marks":marks
+    })
+    save_students(students)
+    print("\nstudent added successfully@!")
+
+def view_students(students):
+    if not students:
+        print("\nNo student records found.")
+    else:
+        print("\nstudent Records:")
+        for i, student in enumerate(students, start=1):
+            print(f"\n{i}.Name: {student['name']}| Roll:{student['roll']}| Marks: {student['marks']}")
+
+
+def delete_student(students):
+    view_students(students)
+    try:
+        num = int(input("\nEnter student number to delete: "))
+        removed  = students.pop(num-1)
+        save_students(students)
+        print(f"\nStudent {removed['name']} deleted")
+    except(ValueError, IndexError):
+        print("\nInvalid student number.")
+
+def main():
+    students = load_students()
+
+    while True:
+        print("\n1. Add student")
+        print("2. View Students")
+        print("3. Delete Student")
+        print("4. Exit")
+
+        choice = input("\nEnter Your Choice:")
+
+        if choice == "1":
+            add_student(students)
+        elif choice == "2":
+            view_students(students)
+        elif choice == "3":
+            delete_student(students)
+        elif choice == "4":
+            print ("\nGoodbye!")
+            break
+        else:
+            print("\nInvalid choice.")
+
+main()
+
